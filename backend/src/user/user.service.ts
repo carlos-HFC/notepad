@@ -1,6 +1,5 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { FindOptions } from "sequelize";
 
 import { CreateUser, UpdateUser } from "../@types";
 import { User } from "./user.model";
@@ -12,12 +11,18 @@ export class UserService {
     private readonly userModel: typeof User
   ) { }
 
-  async getAll(where?: FindOptions) {
-    return await this.userModel.scope('todos').findAll(where)
+  async getAll() {
+    return await this.userModel.findAll({
+      attributes: { exclude: ['hash'] }
+    })
+  }
+
+  async getMe(userId: number) {
+    return await this.userModel.findByPk(userId)
   }
 
   async getById(id: number) {
-    return await this.userModel.findByPk(id)
+    return await this.userModel.scope("todos").findByPk(id)
   }
 
   async getByEmail(email: string) {
@@ -52,7 +57,7 @@ export class UserService {
 
     await user.update(body)
 
-    return user
+    return { message: "Conta atualizada com sucesso!!" }
   }
 
   async delete(id: number) {
@@ -61,5 +66,11 @@ export class UserService {
     if (!user) throw new HttpException("Usuário não encontrado", 404)
 
     await user.destroy()
+  }
+
+  async getActives(email: string) {
+    const user = await this.userModel.scope("inactives").findOne({ where: { email } })
+
+    return user
   }
 }
