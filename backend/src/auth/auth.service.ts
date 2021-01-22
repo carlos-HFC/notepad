@@ -1,5 +1,6 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { addWeeks, isAfter } from 'date-fns'
 
 import { CreateUser, ILogin } from "src/@types";
 import { User } from "src/user/user.model";
@@ -12,8 +13,25 @@ export class AuthService {
     private jwtService: JwtService
   ) { }
 
-  async login(body: ILogin) {
-    const { email, password } = body
+  async reactive(email: string) {
+    const user = await this.userService.getActives(email)
+
+    if (!user) throw new HttpException("Usuário inexistente", 404)
+
+    const compare = addWeeks(new Date(), 1)
+
+    if (isAfter(user.deletedAt, compare)) {
+      await user.destroy({ force: true })
+
+      throw new HttpException("Usuário inexistente", 404)
+    }
+    await user.restore()
+
+    return { user, message: "Sua conta foi reativada" }
+  }
+
+  async login(login: ILogin) {
+    const { email, password } = login
 
     const user = await this.userService.getByEmail(email)
 

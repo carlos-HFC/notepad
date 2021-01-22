@@ -18,4 +18,9 @@ export class AuthController {
   async register(@Body() body: CreateUser) {
     return await this.authService.register(body)
   }
+
+  @Post('reactive')
+  async reactive(@Body() { email }: ILogin) {
+    return await this.authService.reactive(email)
+  }
 }
