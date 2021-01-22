@@ -200,6 +200,63 @@ input[type="checkbox"] {
   }
 }
 
+.formActive {
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+
+  .form {
+    box-shadow: 0 2px 10px #0005;
+    border-radius: 5px;
+    padding: 50px;
+
+    h1 {
+      text-align: center;
+      font-weight: bold;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      background: #cdcdcd;
+      border: 0;
+      outline: none !important;
+      box-shadow: none !important;
+
+      &:focus {
+        background: #cdcdcd;
+
+        & ~ span {
+          transition: width 0.4s;
+          width: 100%;
+          left: 0;
+        }
+      }
+    }
+
+    span {
+      content: "";
+      position: absolute;
+      width: 0;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: map-get($colors, blue);
+      transition: width 0.4s;
+    }
+
+    div {
+      @media screen and (max-width: 320px) {
+        flex-direction: column;
+
+        button {
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+}
+
 .my-form {
   background: #f1f1f1;
   border-radius: 10px;
@@ -212,6 +269,10 @@ input[type="checkbox"] {
   align-items: center;
   min-height: 500px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+
+  @media screen and (max-width: 425px) {
+    width: 100%;
+  }
 
   @media screen and (max-width: 768px) {
     flex-direction: column;
@@ -240,6 +301,12 @@ input[type="checkbox"] {
     height: 100%;
     text-align: center;
 
+    @media screen and (max-width: 425px) {
+      div.w-75 {
+        width: 100% !important;
+      }
+    }
+
     @media screen and (max-width: 900px) {
       width: 100%;
       padding: 0;
@@ -251,6 +318,18 @@ input[type="checkbox"] {
       &:first-child {
         padding-bottom: 25px;
         border-bottom: 1px solid #ccc;
+      }
+    }
+
+    a {
+      color: #212529;
+      padding: 6px 10px;
+      text-decoration: none;
+      font-size: 1rem;
+      display: none;
+
+      @media screen and (max-width: 900px) {
+        display: block;
       }
     }
 
@@ -432,13 +511,13 @@ input[type="checkbox"] {
     background: transparent;
     border-color: #ffffff;
     transition: transform 0.3s;
-  
+
     &:hover,
     &:focus,
     &:active {
       background: inherit;
       border-color: inherit;
-      transform: scale(.95);
+      transform: scale(0.95);
       outline: none;
       box-shadow: none;
     }
@@ -452,6 +531,21 @@ input[type="checkbox"] {
 .overlay-right {
   transform: translateX(0);
   right: 0;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    width: 75%;
+
+    @media screen and (max-width: 1200px) {
+      flex-direction: column;
+      width: auto;
+
+      & > button {
+        margin: 5px 0;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {
