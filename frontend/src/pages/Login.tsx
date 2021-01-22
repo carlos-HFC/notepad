@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { Button, InputBlock, Loader } from "../components";
 import { isAuth, setToken } from "../services/auth";
@@ -9,6 +9,7 @@ import api from "../services/api";
 function Login() {
   const history = useHistory()
 
+  const [active, setActive] = useState(false)
   const [load, setLoad] = useState(false) // LOADER
   const [panel, setPanel] = useState(false) // MUDANÇA DO PAINEL DE LOGIN PARA CADASTRE-SE E VICE-VERSA
   const [login, setLogin] = useState({ // VALORES DE LOGIN
@@ -80,8 +81,8 @@ function Login() {
   return (
     <>
       <Loader loading={load} />
-      <main className="formLogin">
-        <div className={`my-form ${panel ? "right-panel-active" : null}`}>
+      <main className={`formLogin ${!active ? "" : "d-none"}`}>
+        <div className={`my-form ${panel ? "right-panel-active" : ""}`}>
           <div className="form-container sign-in">
             <form className="col-12" onSubmit={handleLogin} autoComplete="off">
               <h1>Login</h1>
@@ -94,6 +95,7 @@ function Login() {
               <div className="d-flex justify-content-center mb-2">
                 <Button background="blue" label="Entrar" className="radius-20" />
               </div>
+              <a href="#" onClick={() => setActive(true)}>Reativar conta</a>
             </form>
           </div>
           <div className="form-container sign-up">
@@ -130,12 +132,35 @@ function Login() {
                 <h1>Bem-vindo de volta!</h1>
                 <p>Para continuar conectado, faça o login com suas credenciais</p>
                 <p className="text-uppercase">ou</p>
-                <Button background="blue" label="Cadastra-se" className="radius-20 ghost"
-                  onClick={() => setPanel(true)}
-                />
+                <div>
+                  <Button background="blue" label="Cadastra-se" className="radius-20 ghost"
+                    onClick={() => setPanel(true)}
+                  />
+                  <Button background="blue" label="Reativar conta" className="radius-20 ghost"
+                    onClick={() => setActive(true)}
+                  />
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </main>
+      <main className={`formActive ${active ? "d-flex" : "d-none"}`}>
+        <div className="form">
+          <form className="col-12" autoComplete="off">
+            <h1>Reativar conta</h1>
+            <div className="mb-3 position-relative">
+              <label htmlFor="ActiveEmail">E-mail</label>
+              <input type="email" id="ActiveEmail" className="form-control" />
+              <span />
+            </div>
+            <div className="d-flex justify-content-around mb-2">
+              <Button background="blue" label="Reativar" className="radius-20" />
+              <Button background="red" label="Cancelar" className="radius-20"
+                onClick={() => setActive(false)}
+              />
+            </div>
+          </form>
         </div>
       </main>
     </>
