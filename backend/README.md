@@ -1,73 +1,76 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# NOTEPAD
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Esse projeto é uma forma de bloco de notas, com sistema login em JWT utilizando o <a href="https://nestjs.com">NestJS</a>, <a href="https://dev.mysql.com/doc/">MySQL</a> e <a href="https://sequelize.org/master/">Sequelize</a>.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+O projeto é composto por uma API em que o usuário pode efetuar login, cadastrar-se, além de criar notas, editá-las e excluí-las. Há a possibilidade do usuário desativar a sua conta e reativá-la dentro de uma semana.
 
-## Description
+<br>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Iniciando
+***
 
-## Installation
+Basta instalar o `NodeJS` e o `MySQL` em sua máquina e instalar as dependências e rodar o projeto via `npm` ou `yarn`:
 
 ```bash
-$ npm install
+# yarn
+yarn install
+yarn start
+
+# npm
+npm install 
+npm run start
 ```
 
-## Running the app
+<br>
 
-```bash
-# development
-$ npm run start
+## Configuração de variáveis
+***
 
-# watch mode
-$ npm run start:dev
+No projeto, há o arquivo `.env.example`, demonstrando quais são as variáveis utilizadas. São referentes a conexão com o banco de dados e a chave e o tempo de expiração do token JWT.
 
-# production mode
-$ npm run start:prod
+```json
+{
+  "DB_DIALECT": "tipo do banco (mysql, postgres, sqlite)",
+  "DB_PORT": "porta do banco (3306, 5432)",
+  "DB_HOST": "endereço da aplicação (localhost, api...)",
+  "DB_NAME": "nome do banco (notepad, todolist)",
+  "DB_USER": "username do banco (root, admin)",
+  "DB_PASS": "senha do banco (******)",
+  "JWT_SECRET": "chave secreta JWT (testestestestestes)",
+  "JWT_EXPIRES": "tempo que o token expira (7d, 2m...)"
+}
 ```
 
-## Test
+<br>
 
-```bash
-# unit tests
-$ npm run test
+## API
+***
 
-# e2e tests
-$ npm run test:e2e
+O servidor roda na porta `8000` e tem as seguintes rotas:
 
-# test coverage
-$ npm run test:cov
-```
+- **POST** - `/auth/login` - Login de usuário
+  - **email:** *string*
+  - **password:** *string*
+- **POST** - `/auth/register` - Registrar um usuário
+  - **name:** *string*
+  - **email:** *string*
+  - **password:** *string*
+  - **confirmPass:** *string*
+- **POST** - `/auth/reactive` - Reativar a conta de um usuário
+  - **email:** *string*
 
-## Support
+<br>
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **GET** - `/users/profile` - Dados do usuário logado
+- **PUT** - `/users` - Editar os dados do usuário logado
+- **DELETE** - `/users` - Desativar conta do usuário logado
 
-## Stay in touch
+<br>
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- **GET** - `/notes` - Buscar todas as notas
+- **GET** - `/notes/:id` - Buscar uma nota pelo ID
+- **POST** - `/notes` - Buscar uma nota pelo ID
+  - **title:** *string*
+  - **description:** *string*
+- **PUT** - `/notes/:id` - Editar uma nota
+- **DELETE** - `/notes/:id` - Deletar uma nota
