@@ -66,7 +66,7 @@ O servidor roda na porta `8000` e tem as seguintes rotas:
 
 - **GET** - `/notes` - Buscar todas as notas
 - **GET** - `/notes/:id` - Buscar uma nota pelo ID
-- **POST** - `/notes` - Buscar uma nota pelo ID
+- **POST** - `/notes` - Registrar uma nota
   - **title:** *string*
   - **description:** *string*
 - **PUT** - `/notes/:id` - Editar uma nota
