@@ -7,7 +7,6 @@ O projeto é composto por uma API em que o usuário pode efetuar login, cadastra
 <br>
 
 ## Iniciando
-***
 
 Basta instalar o `NodeJS` e o `MySQL` em sua máquina e instalar as dependências e rodar o projeto via `npm` ou `yarn`:
 
@@ -24,7 +23,6 @@ npm run start
 <br>
 
 ## Configuração de variáveis
-***
 
 No projeto, há o arquivo `.env.example`, demonstrando quais são as variáveis utilizadas. São referentes a conexão com o banco de dados e a chave e o tempo de expiração do token JWT.
 
@@ -44,7 +42,6 @@ No projeto, há o arquivo `.env.example`, demonstrando quais são as variáveis 
 <br>
 
 ## API
-***
 
 O servidor roda na porta `8000` e tem as seguintes rotas:
 
