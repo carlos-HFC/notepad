@@ -63,8 +63,6 @@ export class UserService {
   async delete(id: number) {
     const user = await this.getById(id)
 
-    if (!user) throw new HttpException("Usuário não encontrado", 404)
-
     await user.destroy()
   }
 
