@@ -3,7 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 
 import { Button, InputBlock, Loader } from "../components";
 import { isAuth, setToken } from "../services/auth";
-import { error, success } from "../utils";
+import { notification } from "../utils";
 import api from "../services/api";
 
 function Login() {
@@ -22,6 +22,7 @@ function Login() {
     password: "",
     confirmPass: "",
   })
+  const [email, setEmail] = useState("") // VALOR PARA REATIVAR CONTA
 
   useEffect(() => {
     if (isAuth()) return history.push("note") // SE ESTIVER AUTENTICADO, REDIRECIONA PARA A PÁGINA DE INSERIR NOTAS
@@ -39,7 +40,7 @@ function Login() {
     e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO DO FORM
 
     // CASO HAJA ALGUM CAMPO VAZIO
-    if (Object.values(login).some(item => !item.trim())) return error("Preencha todos os campos!!")
+    if (Object.values(login).some(item => !item.trim())) return notification('danger', 'error', 'Preencha todos os campos!!')
 
     setLoad(true)
     try {
@@ -49,9 +50,9 @@ function Login() {
       setToken(response.data.token) // SALVAR O TOKEN NO LOCAL STORAGE
 
       return history.push('/note') // REDIRECIONAR PARA A PÁGINA DE INSERIR NOTAS
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
       setLoad(false)
+      notification('danger', 'error', error.response.data.message)
     }
   }
 
@@ -60,21 +61,41 @@ function Login() {
     const { password, confirmPass } = register
 
     // CASO HAJA ALGUM CAMPO VAZIO
-    if (Object.values(register).some(item => !item.trim())) return error("Preencha todos os campos!!")
+    if (Object.values(register).some(item => !item.trim())) return notification('danger', 'error', 'Preencha todos os campos!!')
 
     // SE OS CAMPOS DE SENHA NÃO FOREM IGUAIS
-    if (password !== confirmPass) return error("As senhas não correspondem!!")
+    if (password !== confirmPass) return notification('danger', 'error', 'As senhas não correspondem!!')
 
     setLoad(true)
     try {
       const response = await api.post("/auth/register", { ...register }) // ENVIAR DADOS DE CADASTRO
 
       setLoad(false)
-      success(response.data.message) // MENSAGEM DE SUCESSO
+      notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
 
       return window.location.reload() // RECARREGAR A PÁGINA
-    } catch (err) {
+    } catch (error) {
       setLoad(false)
+      notification('danger', 'error', error.response.data.message)
+    }
+  }
+
+  async function handleActive(e: FormEvent) {
+    e.preventDefault()
+
+    if (!email) return notification('danger', 'error', 'Preencha todos os campos!!')
+
+    setLoad(true)
+    try {
+      const response = await api.post('/auth/reactive', { email })
+
+      setLoad(false)
+      notification('success', 'success', response.data.message)
+
+      return window.location.reload()
+    } catch (error) {
+      setLoad(false)
+      notification('danger', 'error', error.response.data.message)
     }
   }
 
@@ -147,17 +168,19 @@ function Login() {
       </main>
       <main className={`formActive ${active ? "d-flex" : "d-none"}`}>
         <div className="form">
-          <form className="col-12" autoComplete="off">
+          <form className="col-12" autoComplete="off" onSubmit={handleActive}>
             <h1>Reativar conta</h1>
             <div className="mb-3 position-relative">
               <label htmlFor="ActiveEmail">E-mail</label>
-              <input type="email" id="ActiveEmail" className="form-control" />
+              <input type="email" id="ActiveEmail" name="email" className="form-control"
+                value={email} onChange={e => setEmail(e.target.value)}
+              />
               <span />
             </div>
             <div className="d-flex justify-content-around mb-2">
-              <Button background="blue" label="Reativar" className="radius-20" />
-              <Button background="red" label="Cancelar" className="radius-20"
-                onClick={() => setActive(false)}
+              <Button background="blue" label="Reativar" className="radius-20" type="submit" />
+              <Button background="red" label="Cancelar" className="radius-20" type="reset"
+                onClick={() => { setActive(false); setEmail("") }}
               />
             </div>
           </form>
