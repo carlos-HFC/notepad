@@ -7,11 +7,11 @@ import "./css/main.min.css"
 import 'animate.css'
 
 function App() {
-   return (
-      <BrowserRouter>
-         <Routes />
-      </BrowserRouter>
-   );
+  return (
+    <BrowserRouter>
+      <Routes />
+    </BrowserRouter>
+  );
 }
 
 export default App;
