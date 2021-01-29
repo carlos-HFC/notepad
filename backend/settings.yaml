@@ -308,6 +308,24 @@ paths:
                 example:
                   statusCode: 404
                   message: Usuário inexistente
+  /users/profile:
+    get:
+      tags:
+        - User
+      summary: Pegar dados do usuário logado
+      description: O usuário logado terá acesso as suas informações.
+      operationId: User Profile
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        422:
+          $ref: "#/components/responses/NoToken"
   /users:
     put:
       tags:
@@ -408,30 +426,12 @@ paths:
           description: Success
         422:
           $ref: "#/components/responses/NoToken"
-  /users/profile:
-    get:
-      tags:
-        - User
-      summary: Pegar dados do usuário logado
-      description: O usuário logado terá acesso as suas informações.
-      operationId: User Profile
-      security:
-        - bearerAuth: []
-      responses:
-        200:
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-        422:
-          $ref: "#/components/responses/NoToken"
   /notes:
     get:
       tags:
         - Note
       summary: Pegar todas as notas criadas
-      description: O usuário pode criar quantas notas ele quiser
+      description: O usuário pode buscar todas as suas notas
       operationId: Get Notes
       security:
         - bearerAuth: []
@@ -466,5 +466,127 @@ paths:
                   message:
                     type: string
                     example: Nota criada com sucesso
+        422:
+          $ref: "#/components/responses/NoToken"
+  /notes/{id}:
+    get:
+      tags:
+        - Note
+      summary: Pegar uma nota
+      description: O usuário pode buscar uma nota específica
+      operationId: Get One Note
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          example: 56
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        422:
+          $ref: "#/components/responses/NoToken"
+    put:
+      tags:
+        - Note
+      summary: Editar uma nota
+      description: O usuário pode editar uma nota específica
+      operationId: Update Note
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          example: 45
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Nota editada com sucesso
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                example:
+                  statusCode: 404
+                  message: Nota não encontrada
+        422:
+          $ref: "#/components/responses/NoToken"
+    delete:
+      tags:
+        - Note
+      summary: Deletar uma nota
+      description: O usuário pode deletar uma nota específica
+      operationId: Delete Note
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          example: 21
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Nota deletada com sucesso
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  message:
+                    type: string
+                example:
+                  statusCode: 404
+                  message: Nota não encontrada
         422:
           $ref: "#/components/responses/NoToken"
