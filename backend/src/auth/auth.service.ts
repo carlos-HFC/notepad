@@ -35,9 +35,7 @@ export class AuthService {
 
     const user = await this.userService.getByEmail(email)
 
-    if (!user) throw new HttpException("Usuário inexistente", 404)
-
-    if (!(await user.checkPass(password))) throw new HttpException("Credenciais incorretas", 401)
+    if (!user || !(await user.checkPass(password))) throw new HttpException("Credenciais incorretas", 401)
 
     const token = this.createToken(user)
 
@@ -54,6 +52,8 @@ export class AuthService {
     const { password, confirmPass } = body
 
     if (!password) throw new HttpException("Senha é obrigatória", 401)
+
+    if (password.length < 8) throw new HttpException("Senha muito curta", 406)
 
     if (password && !confirmPass) throw new HttpException("Confirmação de senha é obrigatória", 401)
 
