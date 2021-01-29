@@ -1,13 +1,11 @@
-import Swal from 'sweetalert2'
+import Swal, { SweetAlertIcon } from 'sweetalert2'
 
-const error = (msg: string) => {
+const notification = (className: 'success' | 'danger', icon: SweetAlertIcon, title: string) => {
   return Swal.mixin({
     toast: true,
     position: "top-end",
     timer: 3000,
     showConfirmButton: false,
-    icon: "error",
-    title: msg,
     showClass: {
       popup: "animate__animated animate__slideInRight"
     },
@@ -15,31 +13,10 @@ const error = (msg: string) => {
       popup: "animate__animated animate__slideOutRight"
     },
     customClass: {
-      popup: "notification-danger",
-      title: "text-danger"
-    }
-  }).fire()
+      popup: `notification-${className}`,
+      title: `title-${className}`
+    },
+  }).fire(title, undefined, icon)
 }
 
-const success = (msg: string) => {
-  return Swal.mixin({
-    toast: true,
-    position: "top-end",
-    timer: 3000,
-    showConfirmButton: false,
-    icon: "success",
-    title: msg,
-    showClass: {
-      popup: "animate__animated animate__slideInRight"
-    },
-    hideClass: {
-      popup: "animate__animated animate__slideOutRight"
-    },
-    customClass: {
-      popup: "notification-success",
-      title: "text-success"
-    }
-  }).fire()
-}
-
-export { error, success }
+export { notification }
