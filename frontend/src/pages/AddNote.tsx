@@ -3,7 +3,7 @@ import { FaPlusCircle } from 'react-icons/fa'
 import { Editor } from '@tinymce/tinymce-react'
 
 import { Button, Loader, Page } from '../components'
-import { error, success } from '../utils'
+import { notification } from '../utils'
 import api from '../services/api'
 
 const options = {
@@ -28,19 +28,19 @@ function AddNote() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
 
-    if (Object.values(note).some(item => !item.trim())) return error("Preencha todos os campos!!")
+    if (Object.values(note).some(item => !item.trim())) return notification('danger', 'error', 'Preencha todos os campos!!')
 
     setLoad(true)
     try {
       const response = await api.post("/todos", { ...note })
 
       setLoad(false)
-      success(response.data.message)
+      notification('success', 'success', response.data.message)
 
       return setTimeout(() => setNote(initialState), 1500)
     } catch (err) {
       setLoad(false)
-      return error("Erro inesperado!")
+      return notification('danger', 'error', 'Erro inesperado!!')
     }
   }
 
