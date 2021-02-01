@@ -39,6 +39,7 @@ $numbers: (5, 8, 10, 12, 15, 18, 20, 25, 50);
       background: darken($color, 7.5%);
       border-color: darken($color, 10%);
       transition: 0.3s;
+      box-shadow: none;
     }
 
     &:active {
@@ -65,6 +66,10 @@ $numbers: (5, 8, 10, 12, 15, 18, 20, 25, 50);
   color: map-get($colors, dark);
 }
 
+.btn:focus {
+  box-shadow: none !important;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -73,11 +78,32 @@ $numbers: (5, 8, 10, 12, 15, 18, 20, 25, 50);
 
 body {
   font-family: "Quicksand", sans-serif;
-  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 10px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @extend .radius-20;
 }
 
 svg {
   margin-bottom: 0.25rem;
+}
+
+textarea,
+input {
+  resize: none;
+  background: #cdcdcd !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  white-space: pre-wrap;
 }
 
 header {
@@ -146,10 +172,24 @@ header {
 }
 
 input {
-  background: #cdcdcd !important;
-  border: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
+  &.password ~ .inputbd {
+    left: 0;
+  }
+
+  &:focus {
+    background: #cdcdcd !important;
+
+    & ~ .inputbd {
+      width: calc(100% - 30px);
+      transition: width 0.4s;
+    }
+
+    &.password ~ .inputbd {
+      z-index: 4;
+      width: calc(100% - 41px);
+      left: 0;
+    }
+  }
 }
 
 input[type="checkbox"],
@@ -226,10 +266,10 @@ input[type="checkbox"] {
       &:focus {
         background: #cdcdcd;
 
-        & ~ span {
+        & ~ .inputbd {
           transition: width 0.4s;
-          width: 100%;
-          left: 0;
+          width: calc(100% - 30px);
+          left: 15px;
         }
       }
     }
@@ -349,38 +389,38 @@ input[type="checkbox"] {
       outline: none !important;
       box-shadow: none !important;
 
-      &.password ~ span {
+      &.password ~ .inputbd {
         left: 0;
       }
 
       &:focus {
         background: #cdcdcd;
 
-        & ~ span {
+        & ~ .inputbd {
           transition: width 0.4s;
           width: calc(100% - 30px);
           left: 15px;
         }
 
-        &.password ~ span {
+        &.password ~ .inputbd {
           z-index: 4;
           width: calc(100% - 41px);
           left: 0;
         }
       }
     }
-
-    span {
-      content: "";
-      position: absolute;
-      width: 0;
-      bottom: 0;
-      left: 15px;
-      height: 3px;
-      background: map-get($colors, blue);
-      transition: width 0.4s;
-    }
   }
+}
+
+.inputbd {
+  content: "";
+  position: absolute;
+  width: 0;
+  bottom: 0;
+  left: 15px;
+  height: 3px;
+  background: map-get($colors, blue);
+  transition: width 0.4s;
 }
 
 @keyframes show {
@@ -572,33 +612,6 @@ input[type="checkbox"] {
   }
 }
 
-.tox-tinymce {
-  border: none !important;
-  border-radius: 5px !important;
-}
-
-.tox:not([dir="rtl"]) .tox-toolbar__group:not(:last-of-type) {
-  border-right: 1px solid #ababab !important;
-}
-
-.tox-toolbar__primary {
-  border-top: 1px solid #ababab !important;
-  border-bottom: 1px solid #ababab !important;
-  font-family: "Quicksand", sans-serif !important;
-}
-
-.tox-collection__item-label,
-.tox-collection__item-label > * {
-  font-family: "Quicksand", sans-serif !important;
-}
-
-.tox-menubar,
-.tox-edit-area__iframe,
-.tox-toolbar__primary {
-  background: #cdcdcd !important;
-  font-family: "Quicksand", sans-serif !important;
-}
-
 .notes {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -613,9 +626,42 @@ input[type="checkbox"] {
 
   li {
     padding: 20px;
-    overflow: hidden;
-    max-height: 150px;
-    height: 150px;
+    max-height: 200px;
+    height: 175px;
+    cursor: pointer;
+    position: relative;
     @extend .radius-5;
+
+    &:hover {
+      span {
+        opacity: 1;
+      }
+    }
+
+    span {
+      position: absolute;
+      opacity: 0;
+      right: -8px;
+      top: -8px;
+      transition: 0.5s;
+      z-index: 9;
+      cursor: auto
+    }
+
+    h2 {
+      margin-bottom: 5%;
+    }
+
+    p {
+      white-space: pre-wrap;
+      max-height: 70px;
+      overflow: hidden;
+      display: flex;
+      text-align: justify;
+    }
   }
+}
+
+.modal-body[title="Descrição da nota"] {
+  white-space: pre-wrap;
 }
