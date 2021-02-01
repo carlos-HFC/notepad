@@ -11,10 +11,7 @@ import { Note } from "src/note/note.model";
       deletedAt: { [$.not]: null }
     }
   },
-  todos: {
-    paranoid: false,
-    attributes: { exclude: ['hash'] }
-  }
+  todos: { paranoid: false }
 }))
 @Table({ paranoid: true })
 export class User extends Model<User> {
@@ -31,7 +28,6 @@ export class User extends Model<User> {
   })
   email: string
 
-  @NotEmpty({ msg: "Senha é obrigatória" })
   @Column(DataType.VIRTUAL)
   password: string
 
