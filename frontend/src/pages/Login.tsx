@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { Button, InputBlock, Loader } from "../components";
 import { isAuth, setToken } from "../services/auth";
@@ -25,7 +25,7 @@ function Login() {
   const [email, setEmail] = useState("") // VALOR PARA REATIVAR CONTA
 
   useEffect(() => {
-    if (isAuth()) return history.push("note") // SE ESTIVER AUTENTICADO, REDIRECIONA PARA A PÁGINA DE INSERIR NOTAS
+    if (isAuth()) return history.push("profile") // SE ESTIVER AUTENTICADO, REDIRECIONA PARA A PÁGINA DE INSERIR NOTAS
   }, [history])
 
   function changeLogin(e: ChangeEvent<HTMLInputElement>) { // MUDANÇA DE ESTADOS DOS INPUTS DE LOGIN
@@ -38,18 +38,22 @@ function Login() {
 
   async function handleLogin(e: FormEvent) { // EFETUAR LOGIN
     e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO DO FORM
+    const { email, password } = login
 
     // CASO HAJA ALGUM CAMPO VAZIO
     if (Object.values(login).some(item => !item.trim())) return notification('danger', 'error', 'Preencha todos os campos!!')
 
     setLoad(true)
     try {
-      const response = await api.post('/auth/login', { ...login }) // ENVIAR OS DADOS DE LOGIN
+      const response = await api.post('/auth/login', {
+        email: email.trim(),
+        password: password.trim(),
+      }) // ENVIAR OS DADOS DE LOGIN
 
       setLoad(false)
       setToken(response.data.token) // SALVAR O TOKEN NO LOCAL STORAGE
 
-      return history.push('/note') // REDIRECIONAR PARA A PÁGINA DE INSERIR NOTAS
+      return history.push('profile') // REDIRECIONAR PARA A PÁGINA DE INSERIR NOTAS
     } catch (error) {
       setLoad(false)
       notification('danger', 'error', error.response.data.message)
@@ -58,7 +62,7 @@ function Login() {
 
   async function handleRegister(e: FormEvent) { // EFETUAR CADASTRO
     e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO DO FORM
-    const { password, confirmPass } = register
+    const { name, email, password, confirmPass } = register
 
     // CASO HAJA ALGUM CAMPO VAZIO
     if (Object.values(register).some(item => !item.trim())) return notification('danger', 'error', 'Preencha todos os campos!!')
@@ -68,34 +72,40 @@ function Login() {
 
     setLoad(true)
     try {
-      const response = await api.post("/auth/register", { ...register }) // ENVIAR DADOS DE CADASTRO
+      const response = await api.post("/auth/register", {
+        name: name.trim(),
+        email: email.trim(),
+        password: password.trim(),
+        confirmPass: confirmPass.trim(),
+      }) // ENVIAR DADOS DE CADASTRO
 
       setLoad(false)
       notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
 
-      return window.location.reload() // RECARREGAR A PÁGINA
+      return setTimeout(() => window.location.reload(), 2000) // RECARREGAR A PÁGINA
     } catch (error) {
       setLoad(false)
       notification('danger', 'error', error.response.data.message)
     }
   }
 
-  async function handleActive(e: FormEvent) {
-    e.preventDefault()
+  async function handleActive(e: FormEvent) { // REATIVAR CONTA
+    e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO
 
+    // CASO O E-MAIL NÃO SEJA PREENCHIDO
     if (!email) return notification('danger', 'error', 'Preencha todos os campos!!')
 
     setLoad(true)
     try {
-      const response = await api.post('/auth/reactive', { email })
+      const response = await api.post('/auth/reactive', { email: email.trim() }) // ENVIAR OS DADOS
 
       setLoad(false)
-      notification('success', 'success', response.data.message)
+      notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
 
-      return window.location.reload()
+      return window.location.reload() // RECARREGAR PÁGINA
     } catch (error) {
       setLoad(false)
-      notification('danger', 'error', error.response.data.message)
+      notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
     }
   }
 
@@ -107,31 +117,31 @@ function Login() {
           <div className="form-container sign-in">
             <form className="col-12" onSubmit={handleLogin} autoComplete="off">
               <h1>Login</h1>
-              <InputBlock label="E-mail" id="LoginEmail" type="email" name="email"
+              <InputBlock width="w-75" label="E-mail" id="LoginEmail" type="email" name="email"
                 value={login.email} onChange={changeLogin}
               />
-              <InputBlock label="Senha" id="LoginSenha" pass name="password"
+              <InputBlock width="w-75" label="Senha" id="LoginSenha" pass name="password"
                 value={login.password} onChange={changeLogin}
               />
               <div className="d-flex justify-content-center mb-2">
                 <Button background="blue" label="Entrar" className="radius-20" />
               </div>
-              <a href="#" onClick={() => setActive(true)}>Reativar conta</a>
+              <a href="/" onClick={() => setActive(true)}>Reativar conta</a>
             </form>
           </div>
           <div className="form-container sign-up">
             <form className="col-12" onSubmit={handleRegister} autoComplete="off">
               <h1>Criar conta</h1>
-              <InputBlock label="Nome Completo" id="CadNome" name="name"
+              <InputBlock width="w-75" label="Nome Completo" id="CadNome" name="name"
                 value={register.name} onChange={changeRegister}
               />
-              <InputBlock label="E-mail" id="CadEmail" type="email" name="email"
+              <InputBlock width="w-75" label="E-mail" id="CadEmail" type="email" name="email"
                 value={register.email} onChange={changeRegister}
               />
-              <InputBlock label="Senha" id="CadSenha" pass name="password"
+              <InputBlock width="w-75" label="Senha" id="CadSenha" pass name="password"
                 value={register.password} onChange={changeRegister}
               />
-              <InputBlock label="Confirmar Senha" id="CadConfirm" pass name="confirmPass"
+              <InputBlock width="w-75" label="Confirmar Senha" id="CadConfirm" pass name="confirmPass"
                 value={register.confirmPass} onChange={changeRegister}
               />
               <div className="d-flex justify-content-center mb-2">
@@ -171,11 +181,9 @@ function Login() {
           <form className="col-12" autoComplete="off" onSubmit={handleActive}>
             <h1>Reativar conta</h1>
             <div className="mb-3 position-relative">
-              <label htmlFor="ActiveEmail">E-mail</label>
-              <input type="email" id="ActiveEmail" name="email" className="form-control"
+              <InputBlock label="E-mail" type="email" id="ActiveEmail" name="email"
                 value={email} onChange={e => setEmail(e.target.value)}
               />
-              <span />
             </div>
             <div className="d-flex justify-content-around mb-2">
               <Button background="blue" label="Reativar" className="radius-20" type="submit" />
