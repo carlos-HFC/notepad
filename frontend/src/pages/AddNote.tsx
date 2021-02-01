@@ -1,20 +1,9 @@
 import { FormEvent, useState } from 'react'
 import { FaPlusCircle } from 'react-icons/fa'
-import { Editor } from '@tinymce/tinymce-react'
 
 import { Button, Loader, Page } from '../components'
 import { notification } from '../utils'
 import api from '../services/api'
-
-const options = {
-  height: 200,
-  language: "pt_BR",
-  statusbar: false,
-  toolbar_mode: "floating",
-  toolbar: "undo redo | styleselect | fontselect | bold italic underline | alignleft aligncenter alignright alignjustify",
-  content_style: "@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');body{font-family:Quicksand}",
-  font_formats: "Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Quicksand=quicksand; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva;"
-}
 
 const initialState = {
   title: "",
