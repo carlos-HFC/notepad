@@ -3,6 +3,7 @@ import Header from './Header'
 import InputBlock from './InputBlock'
 import Loader from './Loader'
 import Page from './Page'
+import Perfil from './Perfil'
 import RadioButton from './RadioButton'
 
 export {
@@ -11,5 +12,6 @@ export {
   InputBlock,
   Loader,
   Page,
+  Perfil,
   RadioButton
 }
