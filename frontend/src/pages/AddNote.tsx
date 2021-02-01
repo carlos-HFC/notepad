@@ -25,22 +25,23 @@ function AddNote() {
   const [load, setLoad] = useState(false)
   const [note, setNote] = useState(initialState)
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault()
+  async function handleSubmit(e: FormEvent) { // CADASTRAR NOTA
+    e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO
 
+    // CASO HAJA CAMPO EM BRANCO
     if (Object.values(note).some(item => !item.trim())) return notification('danger', 'error', 'Preencha todos os campos!!')
 
     setLoad(true)
     try {
-      const response = await api.post("/todos", { ...note })
+      const response = await api.post("/notes", { ...note }) // ENVIAR OS DADOS
 
       setLoad(false)
-      notification('success', 'success', response.data.message)
+      notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
 
-      return setTimeout(() => setNote(initialState), 1500)
+      return setTimeout(() => setNote(initialState), 1500) // LIMPAR OS CAMPOS
     } catch (err) {
       setLoad(false)
-      return notification('danger', 'error', 'Erro inesperado!!')
+      return notification('danger', 'error', 'Erro inesperado!!') // MENSAGEM DE ERRO
     }
   }
 
@@ -52,7 +53,7 @@ function AddNote() {
           <div className="row mb-3">
             <div className="col-12 mb-2">
               <label htmlFor="Título" className="col-form-label" title="Insira o título da nota">Título</label>
-              <input type="text" className="form-control mb-2" id="Título" title="Insira o título da nota" minLength={1} autoComplete="off"
+              <input name="Título" className="form-control mb-2" id="Título" title="Insira o título da nota" minLength={1} autoComplete="off"
                 value={note.title} onChange={e => setNote({ ...note, title: e.target.value })}
               />
             </div>
@@ -60,8 +61,8 @@ function AddNote() {
           <div className="row mb-3">
             <div className="col-12 mb-2">
               <label htmlFor="Descrição" className="col-form-label" title="Insira uma descrição para a nota">Descrição</label>
-              <Editor apiKey={process.env.REACT_APP_TINYMCE_KEY} id="Descrição" init={options as any}
-                value={note.description} onEditorChange={e => setNote({ ...note, description: e })}
+              <textarea name="Descrição" id="Descrição" rows={5} className="form-control"
+                value={note.description} onChange={e => setNote({ ...note, description: e.target.value })}
               />
             </div>
           </div>
