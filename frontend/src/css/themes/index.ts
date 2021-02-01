@@ -4,8 +4,11 @@ const light = {
   text: "#343a40",
   primary: "#5C0094",
   checked: "#dedede",
-  shadow: "0,0,0",
-  borderChecked: "#ccc"
+  shadow: "0,0,0,.3",
+  borderChecked: "#ccc",
+  perfilBg: "#fefefe",
+  perfilBgList: "#e6e6e6",
+  perfilText: "#444",
 }
 
 const dark = {
@@ -14,8 +17,11 @@ const dark = {
   text: "#fff",
   primary: "#343a40",
   checked: "#666",
-  shadow: "255,255,255",
-  borderChecked: "#999"
+  shadow: "0,0,0,1",
+  borderChecked: "#999",
+  perfilBg: "#333",
+  perfilBgList: "#222",
+  perfilText: "#fff",
 }
 
 export { dark, light }
