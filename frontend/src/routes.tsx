@@ -10,10 +10,9 @@ import { dark, light } from './css/themes'
 import GlobalStyle from './css/styles'
 
 function Private({ ...props }) {
-  // const [theme, setTheme] = useState<DefaultTheme>(JSON.parse(localStorage.getItem("THEME") as string) || light)
-  const [theme, setTheme] = useState<DefaultTheme>(dark)
+  const [theme, setTheme] = useState<DefaultTheme>(JSON.parse(localStorage.getItem("THEME_NOTE") as string) || dark)
 
-  // useEffect(() => localStorage.setItem("THEME", JSON.stringify(theme)), [theme])
+  useEffect(() => localStorage.setItem("THEME_NOTE", JSON.stringify(theme)), [theme])
 
   const handleTheme = () => setTheme(theme.title === 'light' ? dark : light)
 
