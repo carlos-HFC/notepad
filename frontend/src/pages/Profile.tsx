@@ -1,10 +1,10 @@
-import { FormEvent, useContext, useEffect, useState } from 'react'
-import { FaUserCircle } from 'react-icons/fa'
+import { FormEvent, useEffect, useState } from 'react'
+import { FaEdit, FaTrash, FaUserCircle } from 'react-icons/fa'
 import { Modal } from 'react-bootstrap'
 
 import { IUser } from '../@types'
 import { Button, InputBlock, Loader, Page, Perfil } from '../components'
-import { notification } from '../utils'
+import { confirmation, notification } from '../utils'
 import { logout } from '../services/auth'
 import api from '../services/api'
 
@@ -17,10 +17,10 @@ const initialState = {
 }
 
 export default function Profile() {
-  const [load, setLoad] = useState(false)
-  const [modal, setModal] = useState(false)
-  const [user, setUser] = useState<IUser>()
-  const [edit, setEdit] = useState(initialState)
+  const [load, setLoad] = useState(false) // LOADER
+  const [modal, setModal] = useState(false) // MODAL
+  const [user, setUser] = useState<IUser>() // DADOS DO USUÁRIO
+  const [edit, setEdit] = useState(initialState) // DADOS DE EDIÇÃO DA CONTA
 
   useEffect(() => {
     getUser()
@@ -41,23 +41,44 @@ export default function Profile() {
 
     setLoad(true)
     try {
+      // ENVIAR DADOS
       const response = await api.put('/users', {
         name: name.trim(),
         email: email.trim(),
         oldPass: oldPass.trim(),
         password: password.trim(),
         confirmPass: confirmPass.trim(),
-      }) // ENVIAR DADOS
+      })
 
-      if (user?.email !== edit.email || edit.password) return logout() // SE ATUALIZAR O E-MAIL OU A SENHA, EFETUA LOGOUT
+      // SE ATUALIZAR O E-MAIL OU A SENHA, EFETUA LOGOUT
+      if (user?.email !== edit.email || edit.password) {
+        notification('success', 'success', response.data.message)
+        return setTimeout(() => logout(), 1500)
+      }
 
       setLoad(false)
       notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
-      setModal(false) // FECHAR MODAL
+      setModal(false)
       return getUser() // PUXAR O USUÁRIO ATUALIZADO
     } catch (error) {
       setLoad(false)
       return notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
+    }
+  }
+
+  async function excludeAccount() {
+    try {
+      const question = await confirmation('Tem certeza que deseja inativar a conta?', 'Essa ação só poderá ser desfeita em uma semana', 'Sim, inativar conta', 'Não, não inativar conta')
+
+      if (question.isConfirmed) {
+        setLoad(true)
+        await api.delete('/users')
+        setLoad(false)
+        return logout()
+      }
+    } catch (error) {
+      setLoad(false)
+      return notification('danger', 'error', error.response.data.message)
     }
   }
 
@@ -110,8 +131,11 @@ export default function Profile() {
             </ul>
           </div>
           <div className="d-flex">
-            <Button background="yellow" label="Editar" title="Editar perfil"
+            <Button background="yellow" label={<FaEdit />} title="Editar perfil"
               onClick={handleModal}
+            />
+            <Button background="red" label={<FaTrash />} title="Inativar conta" className="ml-2"
+              onClick={excludeAccount}
             />
           </div>
         </Perfil>
