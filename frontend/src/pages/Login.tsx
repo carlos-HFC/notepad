@@ -112,7 +112,7 @@ function Login() {
   return (
     <>
       <Loader loading={load} />
-      <main className={`formLogin ${!active ? "" : "d-none"}`}>
+      <main className={`form-login ${!active ? "" : "d-none"}`}>
         <div className={`my-form ${panel ? "right-panel-active" : ""}`}>
           <div className="form-container sign-in">
             <form className="col-12" onSubmit={handleLogin} autoComplete="off">
@@ -176,7 +176,7 @@ function Login() {
           </div>
         </div>
       </main>
-      <main className={`formActive ${active ? "d-flex" : "d-none"}`}>
+      <main className={`form-active ${active ? "" : "d-none"}`}>
         <div className="form">
           <form className="col-12" autoComplete="off" onSubmit={handleActive}>
             <h1>Reativar conta</h1>
