@@ -36,7 +36,7 @@ export class UserService {
 
     const { id, name, email } = await this.userModel.create(body)
 
-    return { user: { id, name, email }, message: "Usuário criado com sucesso!" }
+    return { user: { id, name, email }, message: "Sua conta foi criada com sucesso!" }
   }
 
   async update(id: number, body: UpdateUser) {
@@ -44,20 +44,24 @@ export class UserService {
     const user = await this.getById(id)
 
     if (email && email !== user.email) {
-      if (await this.getByEmail(email)) throw new HttpException("Usuário já existe", 401)
+      if (await this.getByEmail(email)) throw new HttpException("Esse usuário já existe", 401)
     }
 
     if (oldPass) {
-      if (!(await user.checkPass(oldPass))) throw new HttpException("Senha incorreta", 401)
+      if (!(await user.checkPass(oldPass))) throw new HttpException("Senha atual incorreta", 401)
 
       if (oldPass === password) throw new HttpException("Nova senha não pode ser igual a senha atual", 401)
+
+      if (password.length < 8) throw new HttpException("Senha deve ter pelo menos 8 caracteres", 406)
+
+      if (password && !confirmPass) throw new HttpException("Confirmação de senha é obrigatória", 401)
 
       if (password !== confirmPass) throw new HttpException("As senhas não correspondem", 401)
     }
 
     await user.update(body)
 
-    return { message: "Conta atualizada com sucesso!!" }
+    return { message: "Sua conta foi atualizada com sucesso!" }
   }
 
   async delete(id: number) {
