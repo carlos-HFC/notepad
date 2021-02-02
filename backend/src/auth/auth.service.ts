@@ -27,7 +27,7 @@ export class AuthService {
     }
     await user.restore()
 
-    return { user, message: "Sua conta foi reativada" }
+    return { user, message: "Sua conta foi reativada com sucesso!!" }
   }
 
   async login(login: ILogin) {
@@ -35,7 +35,7 @@ export class AuthService {
 
     const user = await this.userService.getByEmail(email)
 
-    if (!user || !(await user.checkPass(password))) throw new HttpException("Credenciais incorretas", 401)
+    if (!user || !(await user.checkPass(password))) throw new HttpException("As credenciais estão incorretas", 401)
 
     const token = this.createToken(user)
 
@@ -53,7 +53,7 @@ export class AuthService {
 
     if (!password) throw new HttpException("Senha é obrigatória", 401)
 
-    if (password.length < 8) throw new HttpException("Senha muito curta", 406)
+    if (password.length < 8) throw new HttpException("Senha deve ter pelo menos 8 caracteres", 406)
 
     if (password && !confirmPass) throw new HttpException("Confirmação de senha é obrigatória", 401)
 
