@@ -4,7 +4,6 @@ import InputBlock from './InputBlock'
 import Loader from './Loader'
 import Page from './Page'
 import Perfil from './Perfil'
-import RadioButton from './RadioButton'
 
 export {
   Button,
@@ -13,5 +12,4 @@ export {
   Loader,
   Page,
   Perfil,
-  RadioButton
 }
