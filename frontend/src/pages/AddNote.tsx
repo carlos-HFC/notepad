@@ -11,8 +11,8 @@ const initialState = {
 }
 
 function AddNote() {
-  const [load, setLoad] = useState(false)
-  const [note, setNote] = useState(initialState)
+  const [load, setLoad] = useState(false) // LOADER
+  const [note, setNote] = useState(initialState) // CRIAÇÃO DA NOTA
 
   async function handleSubmit(e: FormEvent) { // CADASTRAR NOTA
     e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO

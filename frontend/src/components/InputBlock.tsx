@@ -12,7 +12,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputBlock: React.FC<InputProps> = ({ label, pass, width = "", col = "col-12", ...props }) => {
-  const [type, setType] = useState("password")
+  const [type, setType] = useState("password") // TIPO DO CAMPO SENHA
 
   return (
     <div className={`row mb-2 ${width}`}>
