@@ -4,7 +4,7 @@ import { Modal } from "react-bootstrap"
 
 import { INotes } from "../@types"
 import { Button, Loader, Page } from '../components'
-import { notification } from "../utils"
+import { confirmation, notification } from "../utils"
 import api from "../services/api"
 
 const initialState = {
@@ -13,28 +13,28 @@ const initialState = {
 }
 
 function MyNotes() {
-  const [notes, setNotes] = useState<INotes[]>([])
-  const [load, setLoad] = useState(false)
-  const [modal, setModal] = useState(false)
-  const [nota, setNota] = useState<INotes | undefined>()
-  const [edit, setEdit] = useState(false)
-  const [editNote, setEditNote] = useState(initialState)
+  const [notes, setNotes] = useState<INotes[]>([]) // NOTAS
+  const [load, setLoad] = useState(false) // LOADER
+  const [modal, setModal] = useState(false) // MODAL
+  const [nota, setNota] = useState<INotes | undefined>() // NOTA CLICADA
+  const [edit, setEdit] = useState(false) // FORMULÁRIO DE EDIÇÃO
+  const [editNote, setEditNote] = useState(initialState) // DADOS DE EDIÇÃO
 
   useEffect(() => {
     getNotes()
   }, [])
 
-  const getNotes = () => api.get("/notes").then(response => setNotes(response.data))
+  const getNotes = () => api.get("/notes").then(response => setNotes(response.data)) // PEGAR TODAS AS NOTAS
 
-  function closeModal() {
+  function closeModal() { // FECHAR MODAL
     setModal(false)
     setEdit(false)
   }
 
-  function openNote(id: number) {
+  function openNote(id: number) { // ABRIR MODAL COM A NOTA CLICADA
     setLoad(true)
     setEdit(false)
-    api.get(`/notes/${id}`)
+    api.get(`/notes/${id}`) // PEGAR A NOTA PELO ID
       .then(res => {
         setModal(true)
         setNota(res.data)
@@ -42,24 +42,44 @@ function MyNotes() {
       })
   }
 
-  async function handleEditNote(e: FormEvent) {
-    e.preventDefault()
+  async function handleEditNote(e: FormEvent) { // EDITAR A NOTA
+    e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO
 
     setLoad(true)
     try {
+      // ENVIAR OS DADOS EDITADOS A PARTIR DO ID
       const response = await api.put(`/notes/${nota?.id}`, {
-        title: editNote.title,
-        description: editNote.description
+        title: editNote.title ? editNote.title : nota?.title,
+        description: editNote.description ? editNote.description : nota?.description
       })
 
       setLoad(false)
-      notification('success', 'success', response.data.message)
+      notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
       setEditNote(initialState)
       setModal(false)
-      return getNotes()
+      return getNotes() // ATUALIZAR AS NOTAS
     } catch (error) {
       setLoad(false)
-      return notification('danger', 'error', error.response.data.message)
+      return notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
+    }
+  }
+
+  async function removeNote(id: number) { // EXCLUIR NOTA
+    try {
+      // CONFIRMAR A EXCLUSÃO DA NOTA
+      const question = await confirmation('Tem certeza que deseja excluir essa nota?', 'Essa ação não poderá ser desfeita', 'Sim, deletar nota', 'Não, não deletar nota')
+
+      // SE CLICAR EM SIM
+      if (question.isConfirmed) {
+        setLoad(true)
+        const response = await api.delete(`/notes/${id}`) // EXCLUIR NOTA A PARTIR DO ID
+        notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
+      }
+      setLoad(false)
+      return getNotes() // ATUALIZAR NOTAS
+    } catch (error) {
+      setLoad(false)
+      return notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
     }
   }
 
@@ -112,12 +132,14 @@ function MyNotes() {
             ) : (
               <ul className="notes">
                 {notes.map(note => (
-                  <li key={note.id} onClick={() => openNote(note.id)}>
-                    <span>
-                      <FaTimesCircle color="red" size={20} />
+                  <li key={note.id}>
+                    <span onClick={() => removeNote(note.id)}>
+                      <FaTimesCircle color="#c0392b" size={25} />
                     </span>
-                    <h2>{note.title}</h2>
-                    <p>{note.description}</p>
+                    <div onClick={() => openNote(note.id)}>
+                      <h2>{note.title}</h2>
+                      <p>{note.description}</p>
+                    </div>
                   </li>
                 ))}
               </ul>
