@@ -1,6 +1,7 @@
 $notification: (
   danger: #820d14,
   success: #166625,
+  warning: #fff3cd,
 );
 
 $colors: (
@@ -67,6 +68,11 @@ $numbers: (5, 8, 10, 12, 15, 18, 20, 25, 50);
 }
 
 .btn:focus {
+  @extend .outline-none;
+}
+
+.outline-none {
+  outline: 0 !important;
   box-shadow: none !important;
 }
 
@@ -101,9 +107,8 @@ input {
   resize: none;
   background: #cdcdcd !important;
   border: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
   white-space: pre-wrap;
+  @extend .outline-none;
 }
 
 header {
@@ -187,7 +192,6 @@ input {
     &.password ~ .inputbd {
       z-index: 4;
       width: calc(100% - 41px);
-      left: 0;
     }
   }
 }
@@ -225,8 +229,7 @@ input[type="checkbox"] {
 }
 
 .input-group-append button {
-  outline: none;
-  box-shadow: none !important;
+  @extend .outline-none;
 }
 
 .formLogin {
@@ -248,41 +251,13 @@ input[type="checkbox"] {
   .form {
     box-shadow: 0 2px 10px #0005;
     border-radius: 5px;
-    padding: 50px;
+    padding: 30px;
 
     h1 {
       text-align: center;
       font-weight: bold;
       padding-bottom: 5px;
       margin-bottom: 20px;
-    }
-
-    input {
-      background: #cdcdcd;
-      border: 0;
-      outline: none !important;
-      box-shadow: none !important;
-
-      &:focus {
-        background: #cdcdcd;
-
-        & ~ .inputbd {
-          transition: width 0.4s;
-          width: calc(100% - 30px);
-          left: 15px;
-        }
-      }
-    }
-
-    span {
-      content: "";
-      position: absolute;
-      width: 0;
-      bottom: 0;
-      left: 0;
-      height: 3px;
-      background: map-get($colors, blue);
-      transition: width 0.4s;
     }
 
     div {
@@ -361,12 +336,13 @@ input[type="checkbox"] {
       }
     }
 
-    a {
+    span.link {
       color: #212529;
       padding: 6px 10px;
       text-decoration: none;
       font-size: 1rem;
       display: none;
+      cursor: pointer;
 
       @media screen and (max-width: 900px) {
         display: block;
@@ -381,33 +357,6 @@ input[type="checkbox"] {
 
     label {
       width: 100%;
-    }
-
-    input {
-      background: #cdcdcd;
-      border: 0;
-      outline: none !important;
-      box-shadow: none !important;
-
-      &.password ~ .inputbd {
-        left: 0;
-      }
-
-      &:focus {
-        background: #cdcdcd;
-
-        & ~ .inputbd {
-          transition: width 0.4s;
-          width: calc(100% - 30px);
-          left: 15px;
-        }
-
-        &.password ~ .inputbd {
-          z-index: 4;
-          width: calc(100% - 41px);
-          left: 0;
-        }
-      }
     }
   }
 }
@@ -558,8 +507,7 @@ input[type="checkbox"] {
       background: inherit;
       border-color: inherit;
       transform: scale(0.95);
-      outline: none;
-      box-shadow: none;
+      @extend .outline-none;
     }
   }
 }
@@ -619,6 +567,7 @@ input[type="checkbox"] {
   width: 100%;
   list-style: none;
   gap: 20px;
+  position: relative;
 
   @media screen and (max-width: 767px) {
     grid-template-columns: auto;
@@ -630,22 +579,38 @@ input[type="checkbox"] {
     height: 175px;
     cursor: pointer;
     position: relative;
+    transition: transform 0.4s, background-color 0.4s;
     @extend .radius-5;
 
     &:hover {
+      transform: scale(1.04);
+      transition: transform 0.4s, background-color 0.4s;
+
       span {
         opacity: 1;
+
+        &:hover {
+          transform: scale(1.25);
+        }
       }
     }
 
     span {
       position: absolute;
       opacity: 0;
-      right: -8px;
-      top: -8px;
-      transition: 0.5s;
-      z-index: 9;
-      cursor: auto
+      right: -15px;
+      top: -15px;
+      transition: transform 0.5s, opacity 0.4s;
+      padding: 10px;
+      cursor: pointer;
+
+      svg {
+        margin-bottom: 0;
+      }
+    }
+
+    div {
+      height: 100%;
     }
 
     h2 {
