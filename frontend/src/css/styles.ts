@@ -27,6 +27,11 @@ export default createGlobalStyle`
   .notes {
     li {
       box-shadow: 0 2px 10px rgba(${props => props.theme.shadow});
+      background: ${props => props.theme.bgNote};
+      
+      &:hover {
+        background: ${props => props.theme.bgNoteHover};
+      }
     }
   }
 
