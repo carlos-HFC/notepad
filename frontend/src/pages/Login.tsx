@@ -9,7 +9,7 @@ import api from "../services/api";
 function Login() {
   const history = useHistory()
 
-  const [active, setActive] = useState(false)
+  const [active, setActive] = useState(false) // FORMULÁRIO PARA REATIVAÇÃO DE CONTA
   const [load, setLoad] = useState(false) // LOADER
   const [panel, setPanel] = useState(false) // MUDANÇA DO PAINEL DE LOGIN PARA CADASTRE-SE E VICE-VERSA
   const [login, setLogin] = useState({ // VALORES DE LOGIN
@@ -82,7 +82,7 @@ function Login() {
       setLoad(false)
       notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
 
-      return setTimeout(() => window.location.reload(), 2000) // RECARREGAR A PÁGINA
+      return setTimeout(() => window.location.reload(), 1500) // RECARREGAR A PÁGINA
     } catch (error) {
       setLoad(false)
       notification('danger', 'error', error.response.data.message)
@@ -102,7 +102,7 @@ function Login() {
       setLoad(false)
       notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
 
-      return window.location.reload() // RECARREGAR PÁGINA
+      return setTimeout(() => window.location.reload(), 1500) // RECARREGAR A PÁGINA
     } catch (error) {
       setLoad(false)
       notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
@@ -126,7 +126,7 @@ function Login() {
               <div className="d-flex justify-content-center mb-2">
                 <Button background="blue" label="Entrar" className="radius-20" />
               </div>
-              <a href="/" onClick={() => setActive(true)}>Reativar conta</a>
+              <span className="link" onClick={() => setActive(true)}>Reativar conta</span>
             </form>
           </div>
           <div className="form-container sign-up">
