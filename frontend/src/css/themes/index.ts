@@ -9,6 +9,8 @@ const light = {
   perfilBg: "#fefefe",
   perfilBgList: "#e6e6e6",
   perfilText: "#444",
+  bgNote: "#0001",
+  bgNoteHover: "#0003"
 }
 
 const dark = {
@@ -22,6 +24,8 @@ const dark = {
   perfilBg: "#333",
   perfilBgList: "#222",
   perfilText: "#fff",
+  bgNote: "#0005",
+  bgNoteHover: "#0008"
 }
 
 export { dark, light }

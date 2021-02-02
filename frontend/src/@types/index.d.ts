@@ -12,6 +12,8 @@ declare module "styled-components" {
     perfilBg: string
     perfilBgList: string
     perfilText: string
+    bgNote: string
+    bgNoteHover: string
   }
 }
 
