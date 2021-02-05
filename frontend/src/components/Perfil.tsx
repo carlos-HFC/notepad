@@ -1,18 +1,18 @@
 import styled from "styled-components"
 
 const PerfilContainer = styled.div`
-  max-width: 980px;
-  width: 100%;
+  background: ${props => props.theme.perfilBg};
+  border-radius: 8px;
   margin: auto;
   margin-top: 15px;
+  max-width: 980px;
   padding: 25px 40px;
-  border-radius: 8px;
-  background: ${props => props.theme.perfilBg};
+  width: 100%;
 
   & > :first-child {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
     @media (max-width: 767px) {
       flex-direction: column;
@@ -20,17 +20,17 @@ const PerfilContainer = styled.div`
   }
 
   .img-profile {
-    padding: 7px;
+    align-items: center;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
-    align-items: center;
-    border-radius: 50%
+    padding: 7px;
   }
 
   ul {
-    margin-left: 20px;
     flex: 1;
     list-style: none;
+    margin-left: 20px;
 
     @media (max-width: 767px) {
       margin-left: 0;
@@ -38,16 +38,16 @@ const PerfilContainer = styled.div`
     }
 
     h2 {
-      text-align: center;
       font-weight: 700;
       margin-bottom: 15px;
+      text-align: center;
     }
 
     li {
-      padding: 10px 18px;
-      border-radius: 4px;
       background: ${props => props.theme.perfilBgList};
+      border-radius: 4px;
       color: ${props => props.theme.perfilText};
+      padding: 10px 18px;
 
       & + li {
         margin-top: 5px;
@@ -55,8 +55,8 @@ const PerfilContainer = styled.div`
 
       span {
         font-weight: 700;
-        text-transform: uppercase;
         margin-right: 5px;
+        text-transform: uppercase;
       }
     }
   }

@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Redirect, Route, RouteProps, Switch } from 'react-router-dom'
 import { DefaultTheme, ThemeProvider } from 'styled-components'
 
-import { AddNote, Login, MyNotes, Profile } from './pages'
-import { Header } from './components'
-import { isAuth } from './services/auth'
+import { Header } from 'components'
+import { AddNote, Login, MyNotes, Profile } from 'pages'
+import { isAuth } from 'services/auth'
 
-import { dark, light } from './css/themes'
-import GlobalStyle from './css/styles'
+import { dark, light } from 'css/themes'
+import GlobalStyle from 'css/styles'
 
-function Private({ ...props }) {
+function Private(props: RouteProps) {
   const [theme, setTheme] = useState<DefaultTheme>(JSON.parse(localStorage.getItem("THEME_NOTE") as string) || dark)
 
   useEffect(() => localStorage.setItem("THEME_NOTE", JSON.stringify(theme)), [theme])

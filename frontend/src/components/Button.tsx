@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  background: "red" | "green" | "typescript" | "gray" | "yellow" | "purple" | "blue"
+  background: "blue" | "gray" | "green" | "purple" | "red" | "typescript" | "yellow"
   label: React.ReactNode
 }
 

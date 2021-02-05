@@ -26,8 +26,8 @@ export default createGlobalStyle`
 
   .notes {
     li {
-      box-shadow: 0 2px 10px rgba(${props => props.theme.shadow});
       background: ${props => props.theme.bgNote};
+      box-shadow: 0 2px 10px rgba(${props => props.theme.shadow});
       
       &:hover {
         background: ${props => props.theme.bgNoteHover};

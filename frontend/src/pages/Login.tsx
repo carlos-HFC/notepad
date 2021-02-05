@@ -1,28 +1,28 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
-import { Button, InputBlock, Loader } from "../components";
-import { isAuth, setToken } from "../services/auth";
-import { notification } from "../utils";
-import api from "../services/api";
+import { Button, InputBlock, Loader } from "components";
+import { isAuth, setToken } from "services/auth";
+import api from "services/api";
+import { notification } from "utils";
 
 function Login() {
   const history = useHistory()
 
   const [active, setActive] = useState(false) // FORMULÁRIO PARA REATIVAÇÃO DE CONTA
+  const [email, setEmail] = useState("") // VALOR PARA REATIVAR CONTA
   const [load, setLoad] = useState(false) // LOADER
-  const [panel, setPanel] = useState(false) // MUDANÇA DO PAINEL DE LOGIN PARA CADASTRE-SE E VICE-VERSA
   const [login, setLogin] = useState({ // VALORES DE LOGIN
     email: "",
     password: "",
   })
+  const [panel, setPanel] = useState(false) // MUDANÇA DO PAINEL DE LOGIN PARA CADASTRE-SE E VICE-VERSA
   const [register, setRegister] = useState({ // VALORES DE CADASTRO
     name: "",
     email: "",
     password: "",
     confirmPass: "",
   })
-  const [email, setEmail] = useState("") // VALOR PARA REATIVAR CONTA
 
   useEffect(() => {
     if (isAuth()) return history.push("profile") // SE ESTIVER AUTENTICADO, REDIRECIONA PARA A PÁGINA DE INSERIR NOTAS
@@ -34,6 +34,26 @@ function Login() {
 
   function changeRegister(e: ChangeEvent<HTMLInputElement>) { // MUDANÇA DE ESTADO DOS INPUTS DE CADASTRO
     setRegister({ ...register, [e.target.name]: e.target.value })
+  }
+
+  async function handleActive(e: FormEvent) { // REATIVAR CONTA
+    e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO
+
+    // CASO O E-MAIL NÃO SEJA PREENCHIDO
+    if (!email) return notification('danger', 'error', 'Preencha todos os campos!!')
+
+    setLoad(true)
+    try {
+      const response = await api.post('/auth/reactive', { email: email.trim() }) // ENVIAR OS DADOS
+
+      setLoad(false)
+      notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
+
+      return setTimeout(() => window.location.reload(), 1500) // RECARREGAR A PÁGINA
+    } catch (error) {
+      setLoad(false)
+      notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
+    }
   }
 
   async function handleLogin(e: FormEvent) { // EFETUAR LOGIN
@@ -86,26 +106,6 @@ function Login() {
     } catch (error) {
       setLoad(false)
       notification('danger', 'error', error.response.data.message)
-    }
-  }
-
-  async function handleActive(e: FormEvent) { // REATIVAR CONTA
-    e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO
-
-    // CASO O E-MAIL NÃO SEJA PREENCHIDO
-    if (!email) return notification('danger', 'error', 'Preencha todos os campos!!')
-
-    setLoad(true)
-    try {
-      const response = await api.post('/auth/reactive', { email: email.trim() }) // ENVIAR OS DADOS
-
-      setLoad(false)
-      notification('success', 'success', response.data.message) // MENSAGEM DE SUCESSO
-
-      return setTimeout(() => window.location.reload(), 1500) // RECARREGAR A PÁGINA
-    } catch (error) {
-      setLoad(false)
-      notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
     }
   }
 

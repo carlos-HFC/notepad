@@ -1,25 +1,6 @@
 import Swal, { SweetAlertIcon } from 'sweetalert2'
 
-const notification = (className: 'success' | 'danger', icon: SweetAlertIcon, title: string) => {
-  return Swal.mixin({
-    toast: true,
-    position: "top-end",
-    timer: 3000,
-    showConfirmButton: false,
-    showClass: {
-      popup: "animate__animated animate__slideInRight"
-    },
-    hideClass: {
-      popup: "animate__animated animate__slideOutRight"
-    },
-    customClass: {
-      popup: `notification-${className}`,
-      title: `title-${className}`
-    },
-  }).fire(title, undefined, icon)
-}
-
-const confirmation = (title: string, text: string, confirm: string, cancel: string) => {
+export const confirmation = (title: string, text: string, confirm: string, cancel: string) => {
   return Swal.fire({
     title,
     text,
@@ -44,4 +25,21 @@ const confirmation = (title: string, text: string, confirm: string, cancel: stri
   })
 }
 
-export { confirmation, notification }
+export const notification = (className: 'success' | 'danger', icon: SweetAlertIcon, title: string) => {
+  return Swal.mixin({
+    toast: true,
+    position: "top-end",
+    timer: 3000,
+    showConfirmButton: false,
+    showClass: {
+      popup: "animate__animated animate__slideInRight"
+    },
+    hideClass: {
+      popup: "animate__animated animate__slideOutRight"
+    },
+    customClass: {
+      popup: `notification-${className}`,
+      title: `title-${className}`
+    },
+  }).fire(title, undefined, icon)
+}

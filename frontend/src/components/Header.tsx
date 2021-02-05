@@ -1,19 +1,19 @@
-import styled, { ThemeContext } from 'styled-components'
 import { useContext } from 'react'
+import { Dropdown, Nav, Navbar } from 'react-bootstrap'
 import { FaIdCard, FaStickyNote, FaUserCircle } from 'react-icons/fa'
 import { FiLogOut } from 'react-icons/fi'
-import { NavLink, useHistory } from 'react-router-dom'
-import { Nav, Navbar, Dropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
+import { NavLink, useHistory } from 'react-router-dom'
+import styled, { ThemeContext } from 'styled-components'
 
-import { logout } from '../services/auth'
+import { logout } from 'services/auth'
 
 const Switch = styled.label`
-  position: relative;
   display: inline-block;
-  width: 50px;
   height: 15px;
   margin-bottom: 0;
+  position: relative;
+  width: 50px;
 
   @media screen and (max-width: 767px) {
     margin: 5px 0
@@ -22,32 +22,32 @@ const Switch = styled.label`
 
 const SliderRound = styled.span`
   background: #fff;
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  transition: .2s;
   border-radius: 30px;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .2s;
 
   &::before {
-    content: "";
-    position: absolute;
-    height: 22px;
-    width: 22px;
-    left: 0;
-    bottom: -3.5px;
     background: #aaa;
-    transition: .2s;
     border-radius: 50%;
+    bottom: -3.5px;
+    content: "";
+    height: 22px;
+    left: 0;
+    position: absolute;
+    transition: .2s;
+    width: 22px;
   }
 `
 
 const Check = styled.input.attrs({ type: "checkbox" })`
+  height: 0;
   opacity: 0;
   width: 0;
-  height: 0;
 
   &:checked + ${SliderRound} {
     background: #000;

@@ -2,18 +2,18 @@ import "styled-components"
 
 declare module "styled-components" {
   export interface DefaultTheme {
-    title: string
     background: string
-    text: string
-    primary: string
-    checked: string
-    shadow: string
+    bgNote: string
+    bgNoteHover: string
     borderChecked: string
+    checked: string
     perfilBg: string
     perfilBgList: string
     perfilText: string
-    bgNote: string
-    bgNoteHover: string
+    primary: string
+    shadow: string
+    text: string
+    title: string
   }
 }
 

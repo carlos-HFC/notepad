@@ -1,11 +1,11 @@
 import { FormEvent, useEffect, useState } from "react"
-import { FaTimesCircle } from "react-icons/fa"
 import { Modal } from "react-bootstrap"
+import { FaTimesCircle } from "react-icons/fa"
 
-import { INotes } from "../@types"
-import { Button, Loader, Page } from '../components'
-import { confirmation, notification } from "../utils"
-import api from "../services/api"
+import { INotes } from "@types"
+import { Button, Loader, Page } from 'components'
+import api from "services/api"
+import { confirmation, notification } from "utils"
 
 const initialState = {
   title: "",
@@ -13,34 +13,23 @@ const initialState = {
 }
 
 function MyNotes() {
-  const [notes, setNotes] = useState<INotes[]>([]) // NOTAS
+  const [edit, setEdit] = useState(false) // FORMULÁRIO DE EDIÇÃO
+  const [editNote, setEditNote] = useState(initialState) // DADOS DE EDIÇÃO
   const [load, setLoad] = useState(false) // LOADER
   const [modal, setModal] = useState(false) // MODAL
   const [nota, setNota] = useState<INotes | undefined>() // NOTA CLICADA
-  const [edit, setEdit] = useState(false) // FORMULÁRIO DE EDIÇÃO
-  const [editNote, setEditNote] = useState(initialState) // DADOS DE EDIÇÃO
+  const [notes, setNotes] = useState<INotes[]>([]) // NOTAS
 
   useEffect(() => {
     getNotes()
   }, [])
-
-  const getNotes = () => api.get("/notes").then(response => setNotes(response.data)) // PEGAR TODAS AS NOTAS
 
   function closeModal() { // FECHAR MODAL
     setModal(false)
     setEdit(false)
   }
 
-  function openNote(id: number) { // ABRIR MODAL COM A NOTA CLICADA
-    setLoad(true)
-    setEdit(false)
-    api.get(`/notes/${id}`) // PEGAR A NOTA PELO ID
-      .then(res => {
-        setModal(true)
-        setNota(res.data)
-        setLoad(false)
-      })
-  }
+  const getNotes = () => api.get("/notes").then(response => setNotes(response.data)) // PEGAR TODAS AS NOTAS
 
   async function handleEditNote(e: FormEvent) { // EDITAR A NOTA
     e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO
@@ -62,6 +51,17 @@ function MyNotes() {
       setLoad(false)
       return notification('danger', 'error', error.response.data.message) // MENSAGEM DE ERRO
     }
+  }
+
+  function openNote(id: number) { // ABRIR MODAL COM A NOTA CLICADA
+    setLoad(true)
+    setEdit(false)
+    api.get(`/notes/${id}`) // PEGAR A NOTA PELO ID
+      .then(res => {
+        setModal(true)
+        setNota(res.data)
+        setLoad(false)
+      })
   }
 
   async function removeNote(id: number) { // EXCLUIR NOTA
@@ -143,8 +143,7 @@ function MyNotes() {
                   </li>
                 ))}
               </ul>
-            )
-          }
+            )}
         </div>
       </Page>
     </>

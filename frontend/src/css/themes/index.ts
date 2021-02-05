@@ -1,31 +1,29 @@
-const light = {
-  title: "light",
-  background: "#f5f5f5",
-  text: "#343a40",
-  primary: "#5C0094",
-  checked: "#dedede",
-  shadow: "0,0,0,.3",
-  borderChecked: "#ccc",
-  perfilBg: "#fefefe",
-  perfilBgList: "#e6e6e6",
-  perfilText: "#444",
-  bgNote: "#0001",
-  bgNoteHover: "#0003"
-}
-
-const dark = {
-  title: "dark",
+export const dark = {
   background: "#222",
-  text: "#fff",
-  primary: "#343a40",
-  checked: "#666",
-  shadow: "0,0,0,1",
+  bgNote: "#0005",
+  bgNoteHover: "#0008",
   borderChecked: "#999",
+  checked: "#666",
   perfilBg: "#333",
   perfilBgList: "#222",
   perfilText: "#fff",
-  bgNote: "#0005",
-  bgNoteHover: "#0008"
+  primary: "#343a40",
+  shadow: "0,0,0,1",
+  text: "#fff",
+  title: "dark",
 }
 
-export { dark, light }
+export const light = {
+  background: "#f5f5f5",
+  bgNote: "#0001",
+  bgNoteHover: "#0003",
+  borderChecked: "#ccc",
+  checked: "#dedede",
+  perfilBg: "#fefefe",
+  perfilBgList: "#e6e6e6",
+  perfilText: "#444",
+  primary: "#5C0094",
+  shadow: "0,0,0,.3",
+  text: "#343a40",
+  title: "light",
+}

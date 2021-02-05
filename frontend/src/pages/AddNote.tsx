@@ -1,9 +1,9 @@
 import { FormEvent, useState } from 'react'
 import { FaPlusCircle } from 'react-icons/fa'
 
-import { Button, Loader, Page } from '../components'
-import { notification } from '../utils'
-import api from '../services/api'
+import { Button, Loader, Page } from 'components'
+import api from 'services/api'
+import { notification } from 'utils'
 
 const initialState = {
   title: "",

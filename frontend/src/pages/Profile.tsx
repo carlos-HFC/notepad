@@ -1,12 +1,12 @@
 import { FormEvent, useEffect, useState } from 'react'
-import { FaEdit, FaTrash, FaUserCircle } from 'react-icons/fa'
 import { Modal } from 'react-bootstrap'
+import { FaEdit, FaTrash, FaUserCircle } from 'react-icons/fa'
 
-import { IUser } from '../@types'
-import { Button, InputBlock, Loader, Page, Perfil } from '../components'
-import { confirmation, notification } from '../utils'
-import { logout } from '../services/auth'
-import api from '../services/api'
+import { IUser } from '@types'
+import { Button, InputBlock, Loader, Page, Perfil } from 'components'
+import { logout } from 'services/auth'
+import api from 'services/api'
+import { confirmation, notification } from 'utils'
 
 const initialState = {
   name: "",
@@ -17,23 +17,32 @@ const initialState = {
 }
 
 export default function Profile() {
+  const [edit, setEdit] = useState(initialState) // DADOS DE EDIÇÃO DA CONTA
   const [load, setLoad] = useState(false) // LOADER
   const [modal, setModal] = useState(false) // MODAL
   const [user, setUser] = useState<IUser>() // DADOS DO USUÁRIO
-  const [edit, setEdit] = useState(initialState) // DADOS DE EDIÇÃO DA CONTA
 
   useEffect(() => {
     getUser()
   }, [])
 
-  const getUser = () => api.get('/users/profile').then(res => setUser(res.data)) // PEGAR USUÁRIO LOGADO
+  async function excludeAccount() {
+    try {
+      const question = await confirmation('Tem certeza que deseja inativar a conta?', 'Essa ação só poderá ser desfeita em uma semana', 'Sim, inativar conta', 'Não, não inativar conta')
 
-  function handleModal() { // TOGGLE MODAL
-    setModal(modal => !modal)
-    // SE O MODAL APARECE, COLOCA OS DADOS DO STATE, SENÃO, APAGA OS DADOS DO STATE
-    if (!modal) setEdit({ ...edit, name: String(user?.name), email: String(user?.email) })
-    else setEdit(initialState)
+      if (question.isConfirmed) {
+        setLoad(true)
+        await api.delete('/users')
+        setLoad(false)
+        return logout()
+      }
+    } catch (error) {
+      setLoad(false)
+      return notification('danger', 'error', error.response.data.message)
+    }
   }
+
+  const getUser = () => api.get('/users/profile').then(res => setUser(res.data)) // PEGAR USUÁRIO LOGADO
 
   async function handleEdit(e: FormEvent) { // EDITAR CONTA
     e.preventDefault() // PREVENIR COMPORTAMENTO PADRÃO
@@ -66,20 +75,11 @@ export default function Profile() {
     }
   }
 
-  async function excludeAccount() {
-    try {
-      const question = await confirmation('Tem certeza que deseja inativar a conta?', 'Essa ação só poderá ser desfeita em uma semana', 'Sim, inativar conta', 'Não, não inativar conta')
-
-      if (question.isConfirmed) {
-        setLoad(true)
-        await api.delete('/users')
-        setLoad(false)
-        return logout()
-      }
-    } catch (error) {
-      setLoad(false)
-      return notification('danger', 'error', error.response.data.message)
-    }
+  function handleModal() { // TOGGLE MODAL
+    setModal(modal => !modal)
+    // SE O MODAL APARECE, COLOCA OS DADOS DO STATE, SENÃO, APAGA OS DADOS DO STATE
+    if (!modal) setEdit({ ...edit, name: String(user?.name), email: String(user?.email) })
+    else setEdit(initialState)
   }
 
   return (

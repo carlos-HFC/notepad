@@ -1,14 +1,13 @@
-import React from "react"
 import { InputHTMLAttributes, useState } from "react"
 import { FaEyeSlash, FaEye } from "react-icons/fa"
 
 import { Button } from "."
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  col?: string
   label: string
   pass?: boolean
   width?: string
-  col?: string
 }
 
 const InputBlock: React.FC<InputProps> = ({ label, pass, width = "", col = "col-12", ...props }) => {
